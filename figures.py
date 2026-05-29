@@ -46,4 +46,4 @@ def figure2():
 
 
 if __name__ == '__main__':
-    figure1()
+    figure2()
