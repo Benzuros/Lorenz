@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 
+axes = {"x":0, "y":1, "z":2, 0:0, 1:1, 2:2}
+
 
 class Lorenz:
-    def __init__(self, sigma, r, b, t, h):
+    def __init__(self, r, sigma, b, t, h):
         self.sigma = sigma
         self.r = r
         self.b = b
@@ -43,12 +45,7 @@ class Lorenz:
 
 
     def plot_values(self, ax, which):
-        if which == "x":
-            which = 0
-        elif which == "y":
-            which = 1
-        elif which == "z":
-            which = 2
+        which = axes[which]
 
         for u0 in self.trajectories:
             x0, y0, z0 = u0
@@ -61,6 +58,17 @@ class Lorenz:
             x0, y0, z0 = u0
             xs, ys, zs = self.trajectories[u0]
             ax.plot(xs, ys, zs, lw=0.5, label=f"$u_0 = {x0}, {y0}, {z0}$")
+
+
+    def plot_trajectories2d(self, ax, which):
+        which = tuple(axes[w] for w in which)
+
+        for u0 in self.trajectories:
+            x0, y0, z0 = u0
+            first = self.trajectories[u0][which[0]]
+            second = self.trajectories[u0][which[1]]
+            ax.plot(first, second, lw=0.5, label=f"$u_0 = {x0}, {y0}, {z0}$")
+
 
     def animate_trajectories(self, fig, ax, speed, *, legend:bool=True):
         lines = {}
@@ -84,27 +92,3 @@ class Lorenz:
         ani = FuncAnimation(fig, update, frames=len(self.ts)//speed, interval=1, repeat=False)
 
         return ani
-
-
-if __name__ == '__main__':
-    l = Lorenz(10, 28, 8/3, 100, 0.001)
-    l.simulate((1, 1, 1))
-    l.simulate((1, 1, 1.01))
-
-    Fig = plt.figure(figsize=(10, 5))
-    ax0 = Fig.add_subplot(121, projection='3d', xlabel="$x$", ylabel="$y$", zlabel="$z$",
-                          xlim=(-20, 20), ylim=(-30, 30), zlim=(0, 50))
-    ax0.view_init(15, -60, 0)
-    ax1 = Fig.add_subplot(322, xlim=(0, 100), title="$x$")
-    ax2 = Fig.add_subplot(324, sharex=ax1, title="$y$")
-    ax3 = Fig.add_subplot(326, sharex=ax1, title="$z$")
-    Fig.subplots_adjust(hspace=0.4, wspace=0.3)
-
-    l.plot_trajectories(ax0)
-    l.plot_values(ax1, 0)
-    l.plot_values(ax2, 1)
-    l.plot_values(ax3, 2)
-
-    ax0.legend()
-
-    plt.show()

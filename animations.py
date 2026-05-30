@@ -10,7 +10,7 @@ def animation0():
     ax.set(xlabel="$x$", ylabel="$y$", zlabel="$z$", xlim=(-15, 15), ylim=(-15, 15), zlim=(0, 30))
     ax.view_init(15, -60, 0)
 
-    l = Lorenz(10, 0.8, 8 / 3, 10, 0.001)
+    l = Lorenz(0.5, 10, 8 / 3, 10, 0.001)
     for x in -10, 0, 10:
         for y in -10, 0, 10:
             for z in 0, 10, 20, 30:
@@ -40,7 +40,7 @@ def animation2():
     ax.set(xlabel="$x$", ylabel="$y$", zlabel="$z$", xlim=(-20, 20), ylim=(-30, 30), zlim=(0, 50))
     ax.view_init(15, -60, 0)
 
-    l = Lorenz(10, 28, 8 / 3, 100, 0.001)
+    l = Lorenz(28, 10, 8 / 3, 100, 0.001)
     l.simulate((1, 1, 1))
     l.simulate((1, 1, 1.01))
     l.simulate((1, 1, 0.99))
